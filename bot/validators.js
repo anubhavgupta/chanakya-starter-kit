@@ -16,7 +16,9 @@ core.validator('isGreetings', function (message) {
     var correctMsg = false;
     if(message.indexOf('setBalance') == 0){
       correctMsg = true;
-      balanceDef.notify(message.split('setBalance')[1]);
+      var balance = message.split('setBalance')[1];
+      console.log("validator match ", balance);
+      balanceDef.notify(balance);
     }
     return correctMsg;
   });

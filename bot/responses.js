@@ -18,25 +18,33 @@ core.response('fail', function (to) {
   };
 }, 'greetings');
 
+this._deferred = Q.defer();
+var self = this;
+
+balanceDef.promise.then(null,null,function(balance){
+  self._deferred.resolve(balance);
+});
+
 core.response('success', function (to) {
-  
+
   var deferred = Q.defer();
 
-  balanceDef.promise.then(null,null,function(balance){
-
+  self._deferred.promise.then(function(balance){
     ah.put("https://polar-atoll-33216.herokuapp.com/users/1",{
       "id": 1,
       "balance": balance,
       "currency": "$"
     }).then(function(){
-      
+      self._deferred = Q.defer();
+
       deferred.resolve({
         text:'updated to '+ balance
       });
-       
+
     });
   });
-
+  
+  
   return deferred.promise;
 
 }, 'greetings');
