@@ -9,6 +9,9 @@ var Q = require('q'),
 
 var ah = require("../ajaxHandler.js");
 
+var getBalanceDeferred = require("../valueStore.js");
+var balanceDef = getBalanceDeferred();
+
 core.response('fail', function (to) {
   return {
     text: `I am sorry ${to.first_name}, I am unable to understand what you mean.`
@@ -16,15 +19,24 @@ core.response('fail', function (to) {
 }, 'greetings');
 
 core.response('success', function (to) {
+  
+  var deferred = Q.defer();
 
-  return ah.get("https://polar-atoll-33216.herokuapp.com/users/1")
-      .then(function(userData){
-          return {
-            text:userData.balance
-          }
+  balanceDef.promise.then(null,null,function(balance){
+
+    ah.put("https://polar-atoll-33216.herokuapp.com/users/1",{
+      "id": 1,
+      "balance": balance,
+      "currency": "$"
+    }).then(function(){
+      
+      deferred.resolve({
+        text:'updated to '+ balance
       });
+       
+    });
+  });
 
-  /*return {
-    text: `Hello ${to.first_name}, How are you?`
-  };*/
+  return deferred.promise;
+
 }, 'greetings');
