@@ -16,7 +16,7 @@ core.validator('isGreetings', function (message) {
     var correctMsg = false;
     if(message.indexOf('setBalance') == 0){
       correctMsg = true;
-      var balance = message.split('setBalance')[1];
+      var balance = parseInt(message.split('setBalance')[1]);
       console.log("validator match ", balance);
       balanceDef.notify(balance);
     }
