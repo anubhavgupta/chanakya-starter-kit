@@ -1,30 +1,16 @@
-var express = require('express')
-var bodyParser = require('body-parser')
-var request = require('request')
-var app = express()
+/**
+ * Created by suman on 16/05/16.
+ */
 
-app.set('port', (process.env.PORT || 5000))
 
-// Process application/x-www-form-urlencoded
-app.use(bodyParser.urlencoded({extended: false}))
+var C = require('chanakya'),
+  Cfb = require('chanakya-facebook');
 
-// Process application/json
-app.use(bodyParser.json())
 
-// Index route
-app.get('/', function (req, res) {
-  res.send('Hello world, I am a chat bot')
-})
+var bot = C.bootstrap({
+  mount: 'bot',
+  expectation: 'greetings',
+  token: 'EAAYQsWOUkEgBAAbVnyDYowE2Ha8B4aclIIGaQ1KlK9BLMlKrRRGv8ZCJ9W0ysr2SX24HZABnEZAcvCTA86849FHWqgfju9TZBU3tzkvtJ1JSD6un6MyaZBheICXdGlVkjFuWLbVhiYEmrHa1fALYo7qjghudh9EMUkhN5sTSWVAZDZD'
+});
 
-// for Facebook verification
-app.get('/webhook/', function (req, res) {
-  if (req.query['hub.verify_token'] === 'my_voice_is_my_password_verify_me') {
-    res.send(req.query['hub.challenge'])
-  }
-  res.send('Error, wrong token')
-})
-
-// Spin up the server
-app.listen(app.get('port'), function() {
-  console.log('running on port', app.get('port'))
-})
+Cfb.init(bot);
