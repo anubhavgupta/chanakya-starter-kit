@@ -7,6 +7,6 @@ var core = require('chanakya'),
 
 core.validator('isGreetings', function (message) {
   return Q.fcall(function () {
-    return message == 'hi';
+    return message == 'getBalance';
   });
 });
